@@ -1,0 +1,2 @@
+id,task,script,after_finished,ignore,params
+1,Очистка почты,cleaning_mail.R,do nothing,,
