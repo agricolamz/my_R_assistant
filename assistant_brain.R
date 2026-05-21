@@ -2,15 +2,17 @@ suppressPackageStartupMessages(library(tidyverse))
 library(logger)
 library(gmailr)
 
-path_to_logs <- "~/work/assistant/logs/assistant_logs.txt"
-path_to_scripts <- "~/work/assistant/scripts/"
-path_to_tasks <- "~/work/assistant/tasks/tasks.csv"
+path_to_logs <- "~/work/my_R_assistant/logs/assistant_logs.txt"
+path_to_scripts <- "~/work/my_R_assistant/scripts/"
+path_to_tasks <- "~/work/my_R_assistant/tasks/tasks.csv"
 
 path_to_logs |> 
   appender_tee(file = _, 
                max_lines = 1000L, 
                max_files = 10L) |> 
   log_appender()
+
+log_threshold(INFO)
 
 log_info("📋 Читаю список задач")
 
@@ -30,7 +32,7 @@ seq_along(tasks$id) |>
     log_info("{current_task} начинается, запускаю {tasks$script[task_id]}")
     script <- str_c(path_to_scripts, tasks$script[task_id])
     if(file.access(script) == 0){
-      log_info("✔️   Скрипт существует, запускаю")
+      log_debug("✔️   Скрипт существует, запускаю")
       
       if(tools::file_ext(script) == "R"){
         
@@ -49,7 +51,7 @@ seq_along(tasks$id) |>
         
         source(script, local = TRUE)  
       } else {
-        log_info("🫣  Пока поддерживаются только R скрипты")
+        log_error("🫣  Пока поддерживаются только R скрипты")
       }
       
       if(tasks$after_finished[task_id] == "remove"){
@@ -63,7 +65,7 @@ seq_along(tasks$id) |>
       }
       
     } else {
-      log_info("⚠️   Скрипт {tasks$script[task_id]} не найден")
+      log_error("⚠️   Скрипт {tasks$script[task_id]} не найден")
       log_info("🙈️   Меняю статус задачи {tasks$script[task_id]} на ignore.")
 
       path_to_tasks |> 
@@ -94,7 +96,8 @@ seq_along(tasks$id) |>
                        encoding = "base64") |> 
           gm_send_message()
       } else {
-        log_info("🦦  Интернета нет, так что я не сообщил о проблеме")
+        log_error("🦦  Интернета нет, так что я не сообщил о проблеме")
+        log_info("🦦  Добавляю отправку письма с сообщением о проблеме в список задач")
       }
     }
     log_info("{current_task} закончена")
