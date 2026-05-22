@@ -11,7 +11,8 @@ params:
   - `utils`;
   - `logger`.
 - Before using the skill you need to have the following skills installed:
-  - `sent_gmail_message`.
+  - `sent_gmail_message`;
+  - `add_to_backlog`.
 - Check whether all parameters can be filled.
 - Check whether Ollama is running.
 - Check whether the model from `ollama_model` is present in the system.

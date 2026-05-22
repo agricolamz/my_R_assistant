@@ -19,7 +19,7 @@ sent_gmail_message <- function(to = "agricolamz+from_bot@gmail.com",
                                      subject = "no subject",
                                      message,
                                      log_message = "Отправляю письмо на gmail"){
-  logger::log_debug("Запуск скила `sent_gmail_message`")
+  logger::log_debug("🦦  Запуск умения `sent_gmail_message`")
   
   # проверка параметров -----------------------------------------------------
   
@@ -85,4 +85,6 @@ sent_gmail_message <- function(to = "agricolamz+from_bot@gmail.com",
                          charset = "utf-8",
                          encoding = "base64") |> 
     gmailr::gm_send_message()
+  
+  logger::log_debug("🦦  Завершение запуска умения `sent_gmail_message`")
 }

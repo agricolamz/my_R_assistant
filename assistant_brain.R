@@ -24,7 +24,7 @@ path_to_logs |>
 
 log_threshold(INFO)
 
-log_info("📋 Читаю список задач")
+log_info("📋  Читаю список задач")
 
 path_to_tasks |> 
   read_csv(show_col_types = FALSE,
@@ -34,18 +34,18 @@ path_to_tasks |>
 
 n_tasks <- nrow(tasks)
 
-log_info("Количество задач в файле: {n_tasks}")
+log_info("🦦  Количество задач в файле: {n_tasks}")
 
 seq_along(tasks$id) |> 
   walk(function(task_id){
     current_task <- tasks$task[task_id]
-    logger::log_info("🤖 {current_task} начинается, запускаю умение {tasks$skill[task_id]}")
+    logger::log_info("🦦  {current_task} начинается, запускаю умение {tasks$skill[task_id]}")
     
     if(exists(tasks$skill[task_id])){
-      logger::log_debug("🤖  Умение {tasks$skill[task_id]} есть.")  
+      logger::log_debug("🦦  Умение {tasks$skill[task_id]} есть.")  
     } else {
-      logger::log_error("🤖  Нет умения {tasks$skill[task_id]}.")
-      logger::log_info("🤖  Меняю статус задачи {tasks$skill[task_id]} на ignore.")
+      logger::log_error("🦦  Нет умения {tasks$skill[task_id]}.")
+      logger::log_info("🦦  Меняю статус задачи {tasks$skill[task_id]} на ignore.")
       
       path_to_tasks |> 
         read_csv(show_col_types = FALSE,
@@ -59,6 +59,13 @@ seq_along(tasks$id) |>
                            log_message = "Отправляю письмо на gmail с сообщением об ошибке")
       } else {
         logger::log_error("🦦  Интернета нет, так что я не сообщил о проблеме")
+        add_to_backlog(task = "Отправить письмо о проблеме", 
+                       skill = "sent_gmail_message", 
+                       schedule = "once", 
+                       log_message = "Отправляю письмо на gmail с сообщением об ошибке",
+                       params = list(subject = "Нет скрипта для задачи",
+                                     message = str_glue("Я не нашел скрипт {tasks$skill[task_id]} для задачи {tasks$task[task_id]} и поменял ее статус на `ignore`.")),
+                       path_to_tasks = path_to_tasks)
         logger::log_info("🦦  Добавляю отправку письма с сообщением о проблеме в список задач")
       }
     }
@@ -70,10 +77,10 @@ seq_along(tasks$id) |>
     do.call(what = tasks$skill[task_id],
             args = params)
     
-    log_info("🤖  Задача {current_task} завершена.")
+    log_info("🦦  Задача {current_task} завершена.")
     
-    if(tasks$after_finished[task_id] == "remove"){
-      logger::log_info("🗑  Удаляю задачу {current_task} из списка.")
+    if(tasks$schedule[task_id] == "once"){
+      logger::log_info("🗑      Удаляю задачу {current_task} из списка.")
       
       path_to_tasks |> 
         read_csv(show_col_types = FALSE,

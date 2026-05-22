@@ -10,7 +10,7 @@
 ollama_call <- function(ollama_model = "gemma4b26",
                         ollama_message){
   
-  logger::log_debug("Запуск скила `ollama_call`")
+  logger::log_debug("🦦  Запуск умения `ollama_call`")
   
   # проверка параметров -----------------------------------------------------
   
@@ -70,10 +70,13 @@ ollama_call <- function(ollama_model = "gemma4b26",
   # отправка результата на почту --------------------------------------------
   
   if(curl::has_internet()){
-    sent_gmail_message(subject = "Ответ модели Ollama",
+    sent_gmail_message(log_message = "Отправляю письмо с ответом модели",
+                       subject = "Ответ модели Ollama",
                        message = str_glue("Вот ответ модели:\n\n{result}\n\n---\n\n### Промпт\n\n{ollama_message}"))
   } else {
     logger::log_warning("🦦  Нет интернет соединения, так что я не отправил ответа модели")
     logger::log_info("🦦   Добавляю отправку письма с ответом модели в список задач")
   }
+  
+  logger::log_debug("🦦  Завершение запуска умения `ollama_call`")
 }
