@@ -7,6 +7,7 @@
 #' @importFrom logger log_info
 #' @importFrom stringr str_c
 #' @importFrom litedown mark
+#' @importFrom utils installed.packages
 #' @importFrom gmailr gm_mime
 #' @importFrom gmailr gm_to
 #' @importFrom gmailr gm_subject
@@ -18,15 +19,15 @@ sent_gmail_message <- function(to = "agricolamz+from_bot@gmail.com",
                                      subject = "no subject",
                                      message,
                                      log_message = "Отправляю письмо на gmail"){
-  logger::log_debug("Запуск скрипта `sent-gmail-message.R`")
+  logger::log_debug("Запуск скила `sent_gmail_message`")
   
   # проверка параметров -----------------------------------------------------
   
   logger::log_debug("📨  проверка параметров")
   
-  packages <- c("logger", "gmailr", "stringr", "litedown") 
+  packages <- c("logger", "gmailr", "stringr", "litedown", "utils") 
   
-  if(sum(packages  %in% installed.packages()) == length(packages)){
+  if(sum(packages  %in% utils::installed.packages()) == length(packages)){
     logger::log_debug("📨  Все необходимые пакеты установлены.")  
   } else {
     logger::log_error("📨  Один из следующих пакетов не установлен: {packages}")

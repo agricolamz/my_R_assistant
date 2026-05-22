@@ -40,8 +40,16 @@ log_info("Количество задач в файле: {n_tasks}")
 seq_along(tasks$id) |> 
   walk(function(task_id){
     current_task <- tasks$task[task_id]
-    log_info("{current_task} начинается, запускаю {tasks$script[task_id]}")
-    script <- str_c(path_to_scripts, tasks$script[task_id])
+    log_info("{current_task} начинается, запускаю {tasks$skill[task_id]}")
+    
+    if(exists(tasks$skill[task_id])){
+      logger::log_debug("🤖  Умение {tasks$skill[task_id]} есть.")  
+    } else {
+      logger::log_error("🤖  Нет умения {tasks$skill[task_id]}.")
+      stop()
+    }
+    
+    
     if(file.access(script) == 0){
       log_debug("✔️   Скрипт существует, запускаю")
       
@@ -76,8 +84,8 @@ seq_along(tasks$id) |>
       }
       
     } else {
-      log_error("⚠️   Скрипт {tasks$script[task_id]} не найден")
-      log_info("🙈️   Меняю статус задачи {tasks$script[task_id]} на ignore.")
+      log_error("⚠️   Скрипт {tasks$skill[task_id]} не найден")
+      log_info("🙈️   Меняю статус задачи {tasks$skill[task_id]} на ignore.")
 
       path_to_tasks |> 
         read_csv(show_col_types = FALSE,
@@ -88,7 +96,7 @@ seq_along(tasks$id) |>
       if(curl::has_internet()){
         
         sent_gmail_message(subject = "Нет скрипта для задачи",
-                           message = str_glue("Я не нашел скрипт {tasks$script[task_id]} для задачи {tasks$task[task_id]} и поменял ее статус на `ignore`."),
+                           message = str_glue("Я не нашел скрипт {tasks$skill[task_id]} для задачи {tasks$task[task_id]} и поменял ее статус на `ignore`."),
                            log_message = "Отправляю письмо на gmail с сообщением об ошибке")
         
       } else {

@@ -1,1 +1,2 @@
-id,task,script,after_finished,ignore,params
+id,task,skill,after_finished,ignore,params
+1,Вызов Ollama,ollama_call,remove,,"{""ollama_model"": ""gemma4:26b"", ""ollama_message"": ""Какого цвета лиса?""}"

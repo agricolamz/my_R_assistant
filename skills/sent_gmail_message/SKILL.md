@@ -1,5 +1,5 @@
 ---
-name: "sent-gmail-message"
+name: "sent_gmail_message"
 description: "Sent message via `gmailr`"
 params:
   - log_message
