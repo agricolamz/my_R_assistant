@@ -1,3 +1,1 @@
 id,task,script,after_finished,ignore,params
-1,Очистка почты,cleaning_mail.R,do nothing,,
-2,Вызов Ollama,ollama_call.R,remove,ignore,"{""ollama_model"": ""gemma4"", ""ollama_message"": ""Какого цвета лиса?""}"

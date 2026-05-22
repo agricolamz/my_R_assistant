@@ -4,7 +4,18 @@ library(gmailr)
 
 path_to_logs <- "~/work/my_R_assistant/logs/assistant_logs.txt"
 path_to_scripts <- "~/work/my_R_assistant/scripts/"
+path_to_skills <- "~/work/my_R_assistant/skills/"
 path_to_tasks <- "~/work/my_R_assistant/tasks/tasks.csv"
+
+list.files(path_to_skills, 
+           recursive = TRUE,
+           pattern = "\\.R",
+           full.names = TRUE) |> 
+  str_subset("/scripts/") ->
+  skills_function
+
+skills_function |> 
+  walk(source)
 
 path_to_logs |> 
   appender_tee(file = _, 
@@ -75,26 +86,11 @@ seq_along(tasks$id) |>
         write_csv(file = path_to_tasks, na = "")
       
       if(curl::has_internet()){
-        log_info("🦦  Отправляю письмо на gmail с результатом работы Ollama")
         
-        str_glue("
-Привет!
-
-Я не нашел скрипт {tasks$script[task_id]} для задачи {tasks$task[task_id]} и поменял ее статус на `ignore`.
-
-🦦 
-") |> 
-          litedown::mark() ->
-          message_body
+        sent_gmail_message(subject = "Нет скрипта для задачи",
+                           message = str_glue("Я не нашел скрипт {tasks$script[task_id]} для задачи {tasks$task[task_id]} и поменял ее статус на `ignore`."),
+                           log_message = "Отправляю письмо на gmail с сообщением об ошибке")
         
-        gm_mime() |>
-          gm_to("agricolamz+from_bot@gmail.com") |>
-          gm_subject("Нет скрипта для задачи") |>
-          gm_text_body(message_body,
-                       content_type = "text/html",
-                       charset = "utf-8",
-                       encoding = "base64") |> 
-          gm_send_message()
       } else {
         log_error("🦦  Интернета нет, так что я не сообщил о проблеме")
         log_info("🦦  Добавляю отправку письма с сообщением о проблеме в список задач")
