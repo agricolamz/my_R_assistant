@@ -39,7 +39,7 @@ log_info("Количество задач в файле: {n_tasks}")
 seq_along(tasks$id) |> 
   walk(function(task_id){
     current_task <- tasks$task[task_id]
-    logger::log_info("🤖 {current_task} начинается, запускаю {tasks$skill[task_id]}")
+    logger::log_info("🤖 {current_task} начинается, запускаю умение {tasks$skill[task_id]}")
     
     if(exists(tasks$skill[task_id])){
       logger::log_debug("🤖  Умение {tasks$skill[task_id]} есть.")  
@@ -84,8 +84,17 @@ seq_along(tasks$id) |>
   })
 
 log_info("🧮  Задачи выполнены, переиндексирую список задач")
+
 path_to_tasks |> 
   read_csv(show_col_types = FALSE,
            progress = FALSE) |> 
-  mutate(id = 1:n()) |> 
-  write_csv(file = path_to_tasks, na = "")
+  nrow() ->
+  n_tasks
+
+if(n_tasks > 0) {
+  path_to_tasks |> 
+    read_csv(show_col_types = FALSE,
+             progress = FALSE) |> 
+    mutate(id = 1:n()) |> 
+    write_csv(file = path_to_tasks, na = "")
+}  

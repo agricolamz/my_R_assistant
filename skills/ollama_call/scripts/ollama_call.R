@@ -71,7 +71,7 @@ ollama_call <- function(ollama_model = "gemma4b26",
   
   if(curl::has_internet()){
     sent_gmail_message(subject = "Ответ модели Ollama",
-                       message = str_glue("Вот ответ модели:\n\n{result}"))
+                       message = str_glue("Вот ответ модели:\n\n{result}\n\n---\n\n###Промпт\n{ollama_message}"))
   } else {
     logger::log_warning("🦦  Нет интернет соединения, так что я не отправил ответа модели")
     logger::log_info("🦦   Добавляю отправку письма с ответом модели в список задач")
