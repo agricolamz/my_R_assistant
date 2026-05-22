@@ -33,30 +33,30 @@ ollama_call <- function(ollama_model = "gemma4b26",
   }
 
   if(exists("ollama_model")){
-    log_debug("🦙  параметр `ollama_model` есть")  
+    logger::log_debug("🦙  параметр `ollama_model` есть")  
   } else {
-    log_error("🦙  нет параметра `ollama_model`")
+    logger::log_error("🦙  нет параметра `ollama_model`")
     stop()
   }
   
   if(exists("ollama_message")){
-    log_debug("🦙  параметр `ollama_message` есть")  
+    logger::log_debug("🦙  параметр `ollama_message` есть")  
   } else {
-    log_error("🦙  нет параметра `ollama_message`")
+    logger::log_error("🦙  нет параметра `ollama_message`")
     stop()
   }
   
   if(ollamar::test_connection(logical = TRUE)){
-    log_debug("🦙  Ollama запущена")  
+    logger::log_debug("🦙  Ollama запущена")  
   } else {
-    log_error("🦙  Ollama не запущена")
+    logger::log_error("🦙  Ollama не запущена")
     stop()
   }
   
   if(ollamar::model_avail(ollama_model)){
-    log_debug("🦙  Модель {ollama_model} есть в списке доступных моделей")  
+    logger::log_debug("🦙  Модель {ollama_model} есть в списке доступных моделей")  
   } else {
-    log_error("🦙  Модели {ollama_model} нет в списке доступных моделей")
+    logger::log_error("🦙  Модели {ollama_model} нет в списке доступных моделей")
     stop()
   }
   
@@ -73,7 +73,7 @@ ollama_call <- function(ollama_model = "gemma4b26",
     sent_gmail_message(subject = "Ответ модели Ollama",
                        message = str_glue("Вот ответ модели:\n\n{result}"))
   } else {
-    log_warning("🦦  Нет интернет соединения, так что я не отправил ответа модели")
-    log_info("🦦   Добавляю отправку письма с ответом модели в список задач")
+    logger::log_warning("🦦  Нет интернет соединения, так что я не отправил ответа модели")
+    logger::log_info("🦦   Добавляю отправку письма с ответом модели в список задач")
   }
 }
