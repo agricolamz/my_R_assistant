@@ -41,7 +41,7 @@ sent_gmail_message <- function(to = getOption("my_R_assistant_preferred_out_mail
     stop()
   }
 
-  if(is.null(to)){
+  if(!is.null(to)){
     logger::log_debug("📨  параметр `to` заполнен")  
   } else {
     logger::log_error("📨  не заполнен параметр `to`")

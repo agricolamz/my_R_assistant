@@ -1,5 +1,6 @@
 #' @param ollama_model Specifies an Ollama model to call.
 #' @param ollama_message Text of the prompt.
+#' @param log_message message for adding to logs
 #' 
 #' @importFrom logger log_debug
 #' @importFrom logger log_error
@@ -8,7 +9,8 @@
 #' @importFrom ollamar model_avail
 
 ollama_call <- function(ollama_model = "gemma4b26",
-                        ollama_message){
+                        ollama_message,
+                        log_message = "Делаю запрос модели Ollama"){
   
   logger::log_debug("🦦  Запуск умения `ollama_call`")
   
@@ -35,14 +37,14 @@ ollama_call <- function(ollama_model = "gemma4b26",
   if(exists("ollama_model")){
     logger::log_debug("🦙  параметр `ollama_model` есть")  
   } else {
-    logger::log_error("🦙  нет параметра `ollama_model`")
+    logger::log_error("🦙  не заполнен параметр `ollama_model`")
     stop()
   }
   
   if(exists("ollama_message")){
     logger::log_debug("🦙  параметр `ollama_message` есть")  
   } else {
-    logger::log_error("🦙  нет параметра `ollama_message`")
+    logger::log_error("🦙  не заполнен параметр `ollama_message`")
     stop()
   }
   
@@ -61,6 +63,7 @@ ollama_call <- function(ollama_model = "gemma4b26",
   }
   
   # вызов функции -----------------------------------------------------------
+  logger::log_info("🦙  {log_message}")
   
   ollama_message |>
     ollamar::generate(model = ollama_model) |>
@@ -70,12 +73,18 @@ ollama_call <- function(ollama_model = "gemma4b26",
   # отправка результата на почту --------------------------------------------
   
   if(curl::has_internet()){
-    sent_gmail_message(log_message = "Отправляю письмо с ответом модели",
+    sent_gmail_message(log_message = "Отправляю письмо с ответом Ollama",
                        subject = "Ответ модели Ollama",
                        message = str_glue("Вот ответ модели:\n\n{result}\n\n---\n\n### Промпт\n\n{ollama_message}"))
   } else {
-    logger::log_warning("🦦  Нет интернет соединения, так что я не отправил ответа модели")
-    logger::log_info("🦦   Добавляю отправку письма с ответом модели в список задач")
+    logger::log_warn("🦦  Нет интернет соединения, так что я не отправил ответа модели")
+    add_to_backlog(task = "Отправить письмо с ответом модели", 
+                   skill = "sent_gmail_message", 
+                   schedule = "once", 
+                   log_message = "Добавляю отправку письма с ответом модели в список задач",
+                   params = list(subject = "Ответ модели Ollama",
+                                 message = str_glue("Вот ответ модели:\n\n{result}\n\n---\n\n### Промпт\n\n{ollama_message}")),
+                   path_to_tasks = path_to_tasks)
   }
   
   logger::log_debug("🦦  Завершение запуска умения `ollama_call`")

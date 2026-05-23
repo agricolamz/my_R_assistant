@@ -4,6 +4,7 @@ description: Post a messages to Ollama and send the result via mail
 params:
   - ollama_model
   - ollama_message
+  - log_message
 ---
 
 - Before using the skill you need to have the following R packages installed:

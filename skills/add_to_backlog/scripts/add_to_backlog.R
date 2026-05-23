@@ -1,13 +1,14 @@
-#' @param task
-#' @param skill
-#' @param schedule
-#' @param ignore
-#' @param params
-#' @param path_to_tasks
+#' @param task Task name
+#' @param skill Task skill
+#' @param schedule If `once` --- removes task after complition
+#' @param ignore If `ignore` --- task will be kept unsolved in the task list.
+#' @param params parameters for the skill
+#' @param path_to_tasks path to tasks
 #' @param log_message message for adding to logs
 #' 
 #' @importFrom logger log_debug
 #' @importFrom logger log_info
+#' @importFrom logger log_error
 #' @importFrom yaml as.yaml
 #' @importFrom readr read_csv
 #' @importFrom readr write_csv
@@ -19,7 +20,8 @@ add_to_backlog <- function(task = "новое задание",
                            schedule = "once",
                            ignore = NA,
                            params = NA,
-                           path_to_tasks,
+                           path_to_tasks = path_to_tasks,
+                           immediate_execute = FALSE,
                            log_message = "Добавляю задание в список задач"){
   
   logger::log_debug("🦦  Запуск умения `add_to_backlog`")
@@ -29,49 +31,57 @@ add_to_backlog <- function(task = "новое задание",
   if(exists("task")){
     logger::log_debug("🦦  параметр `task` есть")  
   } else {
-    logger::log_error("🦦  нет параметра `task`")
+    logger::log_error("🦦  не заполнен параметр `task`")
     stop()
   }
   
   if(exists("skill")){
     logger::log_debug("🦦  параметр `skill` есть")  
   } else {
-    logger::log_error("🦦  нет параметра `skill`")
+    logger::log_error("🦦  не заполнен параметр `skill`")
     stop()
   }
   
   if(exists("schedule")){
     logger::log_debug("🦦  параметр `schedule` есть")  
   } else {
-    logger::log_error("🦦  нет параметра `schedule`")
+    logger::log_error("🦦  не заполнен параметр `schedule`")
     stop()
   }
   
   if(exists("ignore")){
     logger::log_debug("🦦  параметр `ignore` есть")  
   } else {
-    logger::log_error("🦦  нет параметра `ignore`")
+    logger::log_error("🦦  не заполнен параметр `ignore`")
     stop()
   }
   
   if(exists("params")){
     logger::log_debug("🦦  параметр `params` есть")  
   } else {
-    logger::log_error("🦦  нет параметра `params`")
+    logger::log_error("🦦  не заполнен параметр `params`")
     stop()
   }
   
   if(exists("log_message")){
     logger::log_debug("🦦  параметр `log_message` есть")  
   } else {
-    logger::log_error("🦦  нет параметра `log_message`")
+    logger::log_error("🦦  не заполнен параметр `log_message`")
     stop()
   }
+  
+  if(exists("immediate_execute")){
+    logger::log_debug("🦦  параметр `immediate_execute` есть")  
+  } else {
+    logger::log_error("🦦  не заполнен параметр `immediate_execute`")
+    stop()
+  }
+  
   
   if(file.exists(path_to_tasks)){
     logger::log_debug("🦦  файл с заданиями существует")  
   } else {
-    logger::log_error("🦦  нет параметра `log_message`")
+    logger::log_error("🦦  нет файла с заданиями")
     stop()
   }
   
@@ -79,7 +89,7 @@ add_to_backlog <- function(task = "новое задание",
     colnames() ->
     task_colnames
   
-  expected_colnames <- c("id", "task", "хуй", "skill", "schedule", "ignore", "params")
+  expected_colnames <- c("id", "task", "skill", "schedule", "ignore", "params")
   
   absent_colnames <- expected_colnames[which(!(expected_colnames %in% task_colnames))]
   
@@ -106,5 +116,5 @@ add_to_backlog <- function(task = "новое задание",
                      params = params |> yaml::as.yaml())) |>
     readr::write_csv(file = path_to_tasks, na = "")
   
-  logger::log_debug("🦦  Завершение запуска умения `sent_gmail_message`")
+  logger::log_debug("🦦  Завершение запуска умения `add_to_backlog`")
 }

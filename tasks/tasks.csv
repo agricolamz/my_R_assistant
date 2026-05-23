@@ -1,3 +1,1 @@
 id,task,skill,schedule,ignore,params
-1,Вызов Ollama,ollama_call,once,,"ollama_model: gemma4:26b
-ollama_message: Какого цвета лиса?"
