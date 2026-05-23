@@ -15,10 +15,10 @@
 #' @importFrom gmailr gm_send_message
 #' @importFrom gmailr gm_profile
 
-sent_gmail_message <- function(to = "agricolamz+from_bot@gmail.com",
-                                     subject = "no subject",
-                                     message,
-                                     log_message = "Отправляю письмо на gmail"){
+sent_gmail_message <- function(to = getOption("my_R_assistant_preferred_out_mail"),
+                               subject = "no subject",
+                               message,
+                               log_message = "Отправляю письмо на gmail"){
   logger::log_debug("🦦  Запуск умения `sent_gmail_message`")
   
   # проверка параметров -----------------------------------------------------
