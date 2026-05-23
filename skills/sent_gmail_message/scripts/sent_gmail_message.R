@@ -40,6 +40,13 @@ sent_gmail_message <- function(to = getOption("my_R_assistant_preferred_out_mail
     logger::log_error("📨  нет параметра `to`")
     stop()
   }
+
+  if(is.null(to)){
+    logger::log_debug("📨  параметр `to` заполнен")  
+  } else {
+    logger::log_error("📨  не заполнен параметр `to`")
+    stop()
+  }
   
   if(exists("subject")){
     logger::log_debug("📨  параметр `subject` есть")  

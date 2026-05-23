@@ -1,10 +1,11 @@
+setwd("~/work/my_R_assistant")
 suppressPackageStartupMessages(library(tidyverse))
 library(logger)
 
-path_to_logs <- "~/work/my_R_assistant/logs/assistant_logs.txt"
-path_to_scripts <- "~/work/my_R_assistant/scripts/"
-path_to_skills <- "~/work/my_R_assistant/skills/"
-path_to_tasks <- "~/work/my_R_assistant/tasks/tasks.csv"
+path_to_logs <- str_c(getwd(), "/logs/assistant_logs.txt")
+path_to_scripts <- str_c(getwd(), "/scripts/")
+path_to_skills <- str_c(getwd(), "/skills/")
+path_to_tasks <- str_c(getwd(), "/tasks/tasks.csv")
 
 list.files(path_to_skills, 
            recursive = TRUE,
