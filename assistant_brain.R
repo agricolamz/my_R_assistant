@@ -62,7 +62,6 @@ seq_along(tasks$id) |>
              params = tasks$params[task_id],
              task_id = task_id,
              path_to_tasks = path_to_tasks)
-    
     })
 
 log_info("🧮  Задачи выполнены, переиндексирую список задач")

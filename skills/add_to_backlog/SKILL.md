@@ -17,3 +17,14 @@ params:
   - `dplyr`;
   - `tibble`;
   - `logger`.
+- Check whether all parameters can be filled.
+- Check whether the file with tasks from the `path_to_tasks` exists.
+- Check whether the file with tasks is a `.csv` file with the following columns:
+  - `id`
+  - `task`
+  - `skill`
+  - `schedule`
+  - `ignore`
+  - `params`
+- Through log message from the `log_message` parameter.
+- Add new line to the file with tasks filling from the skill's parameters.
