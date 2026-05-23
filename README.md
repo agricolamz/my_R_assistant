@@ -9,7 +9,9 @@ I would like to use a `cron` starting `assistnat_brain.R` script that will run m
 
 For now I wrote just two meaningful skills, but I plan to write more:
 
-- `sent_gmail_message` --- Sent message via `gmailr`;
+- `add_to_backlog` --- add task to the task list;
+- `run_task` --- run task from the task list;
+- `sent_gmail_message` --- sent message via `gmailr`;
 - `ollama_call` --- post a messages to Ollama and send the result via mail.
 
 ## Tasks
