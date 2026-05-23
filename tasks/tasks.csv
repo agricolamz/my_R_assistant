@@ -1,3 +1,1 @@
 id,task,skill,schedule,ignore,params
-1,добавить,add_to_backlog,once,,"ollama_model: gemma4:26b
-ollama_message: Какого цвета лиса?"

@@ -32,6 +32,22 @@ path_to_tasks |>
   filter(is.na(ignore)) ->
   tasks
 
+if(sum(duplicated(tasks$id)) > 0) {
+  log_info("🧮  Обнаружены повторяющиеся индексы, переиндексирую список задач")
+  
+  path_to_tasks |> 
+    read_csv(show_col_types = FALSE,
+             progress = FALSE) |> 
+    mutate(id = 1:n()) |> 
+    write_csv(file = path_to_tasks, na = "")
+  
+  path_to_tasks |> 
+    read_csv(show_col_types = FALSE,
+             progress = FALSE) |> 
+    filter(is.na(ignore)) ->
+    tasks
+}
+
 n_tasks <- nrow(tasks)
 
 log_info("🦦  Количество задач в файле: {n_tasks}")
