@@ -1,9 +1,10 @@
 #' @param task Task name
 #' @param skill Task skill
-#' @param schedule If `once` --- removes task after complition
+#' @param schedule If `once` --- removes task after completion
 #' @param ignore If `ignore` --- task will be kept unsolved in the task list.
 #' @param params parameters for the skill
 #' @param path_to_tasks path to tasks
+#' @param immediate_execute logical. States whether the task should be executed.
 #' @param log_message message for adding to logs
 #' 
 #' @importFrom logger log_debug
@@ -77,7 +78,6 @@ add_to_backlog <- function(task = "новое задание",
     stop()
   }
   
-  
   if(file.exists(path_to_tasks)){
     logger::log_debug("🦦  файл с заданиями существует")  
   } else {
@@ -107,14 +107,34 @@ add_to_backlog <- function(task = "новое задание",
   path_to_tasks |> 
     readr::read_csv(show_col_types = FALSE,
                     progress = FALSE) |> 
-    dplyr::bind_rows(
-      tibble::tibble(id = 0,
-                     task = task,
-                     skill = skill,
-                     schedule = schedule,
-                     ignore = ignore,
-                     params = params |> yaml::as.yaml())) |>
-    readr::write_csv(file = path_to_tasks, na = "")
+    pull(id) |> 
+    as.double() |> 
+    sum() ->
+    new_id
   
+  new_id <- new_id + 1
+  
+  if(immediate_execute){
+    run_task(current_task = task,
+             skill = skill,
+             schedule = "",
+             params = params |> yaml::as.yaml(), 
+             task_id = new_id)
+  }
+  
+  if (schedule != "once"){
+    path_to_tasks |> 
+      readr::read_csv(show_col_types = FALSE,
+                      progress = FALSE) |> 
+      dplyr::bind_rows(
+        tibble::tibble(id = new_id,
+                       task = task,
+                       skill = skill,
+                       schedule = schedule,
+                       ignore = ignore,
+                       params = params |> yaml::as.yaml())) |>
+      readr::write_csv(file = path_to_tasks, na = "")
+  }
+
   logger::log_debug("🦦  Завершение запуска умения `add_to_backlog`")
 }

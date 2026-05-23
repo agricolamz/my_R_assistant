@@ -27,4 +27,5 @@ params:
   - `ignore`
   - `params`
 - Through log message from the `log_message` parameter.
+- Calculate a `new_id` variable with sum of all `id` values from the task file + 1.
 - Add new line to the file with tasks filling from the skill's parameters.

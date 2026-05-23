@@ -15,7 +15,6 @@
 #' @importFrom readr write_csv
 #' @importFrom yaml read_yaml
 
-
 run_task <- function(current_task,
                      skill,
                      params,
@@ -118,7 +117,7 @@ run_task <- function(current_task,
   
   log_info("🦦  Задача {current_task} завершена.")
   
-  if(tasks$schedule[task_id] == "once"){
+  if(schedule == "once"){
     logger::log_info("🗑  Удаляю задачу {current_task} из списка.")
     
     path_to_tasks |> 

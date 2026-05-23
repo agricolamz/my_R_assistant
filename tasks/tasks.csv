@@ -1,3 +1,9 @@
 id,task,skill,schedule,ignore,params
 1,Вызов Ollama,ollama_call,once,,"ollama_model: gemma4:26b
-ollama_message: Какого цвета лиса?"
+ollama_message: Какого цвета небо?"
+2,Отправка второго тестового письма,sent_gmail_message,once,,"subject: тест
+message: Все прекрасно, но нужен тест.
+"
+4,Отправка второго тестового письма,sent_gmail_message,once,,"subject: тест
+message: Все прекрасно, но нужен тест.
+"

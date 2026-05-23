@@ -11,10 +11,7 @@ list.files(path_to_skills,
            recursive = TRUE,
            pattern = "\\.R",
            full.names = TRUE) |> 
-  str_subset("/scripts/") ->
-  skills_function
-
-skills_function |> 
+  str_subset("/scripts/") |> 
   walk(source)
 
 path_to_logs |> 
@@ -25,7 +22,7 @@ path_to_logs |>
 
 log_threshold(INFO)
 
-log_info("📋  Читаю список задач")
+log_info("📋  Начало сессии. Читаю список задач")
 
 path_to_tasks |> 
   read_csv(show_col_types = FALSE,
@@ -78,4 +75,6 @@ if(n_tasks > 0) {
              progress = FALSE) |> 
     mutate(id = 1:n()) |> 
     write_csv(file = path_to_tasks, na = "")
-}  
+}
+
+log_info("🏁  Конец сессии.")

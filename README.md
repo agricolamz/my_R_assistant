@@ -14,6 +14,8 @@ For now I wrote just two meaningful skills, but I plan to write more:
 - `sent_gmail_message` --- sent message via `gmailr`;
 - `ollama_call` --- post a messages to Ollama and send the result via mail.
 
+Why not turn this into the package? I like an idea of `skills` --- the dynamic scripts that can be written by any person and make it possible to customize your agent.
+
 ## Tasks
 
 Assistant works around simple `.csv` file with the following structure.
