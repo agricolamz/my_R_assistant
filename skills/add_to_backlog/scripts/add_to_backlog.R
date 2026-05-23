@@ -122,7 +122,7 @@ add_to_backlog <- function(task = "новое задание",
              task_id = new_id)
   }
   
-  if (schedule != "once"){
+  if ((isTRUE(immediate_execute) & schedule != "once") | isFALSE(immediate_execute)){
     path_to_tasks |> 
       readr::read_csv(show_col_types = FALSE,
                       progress = FALSE) |> 

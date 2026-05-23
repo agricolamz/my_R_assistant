@@ -118,7 +118,7 @@ run_task <- function(current_task,
   log_info("🦦  Задача {current_task} завершена.")
   
   if(schedule == "once"){
-    logger::log_info("🗑  Удаляю задачу {current_task} из списка.")
+    logger::log_info("🗑   Удаляю задачу {current_task} из списка.")
     
     path_to_tasks |> 
       readr::read_csv(show_col_types = FALSE,
